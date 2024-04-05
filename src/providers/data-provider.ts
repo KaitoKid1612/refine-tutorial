@@ -2,16 +2,17 @@ const API_URL = "https://api.fake-rest.refine.dev";
 
 export const dataProvider: {
   getList: ({ resource, pagination, filters, sorters, meta }: {
-    resource: string;
+    resource: any;
     pagination: any;
     filters: any;
     sorters: any;
     meta: any
   }) => Promise<{ total: any; data: any }>;
-  getOne: ({ resource, id, meta }: { resource: string; id: any; meta: any }) => Promise<{ data: any }>;
-  update: ({ resource, id, variables, meta }: { resource: string; id: any; variables: any; meta: any }) => Promise<{
+  getOne: ({ resource, id, meta }: { resource: any; id: any; meta: any }) => Promise<{ data: any }>;
+  update: ({ resource, id, variables, meta }: { resource: any; id: any; variables: any; meta: any }) => Promise<{
     data: any
-  }>
+  }>;
+  create: ({ resource, variables, meta }: { resource: any; variables: any; meta: any }) => Promise<{ data: any }>
 } = {
   getOne: async ({ resource, id, meta }) => {
     const response = await fetch(`${API_URL}/${resource}/${id}`);
@@ -62,5 +63,20 @@ export const dataProvider: {
     const data = await response.json();
 
     return { data, total: data.length };
-  }
+  },
+  create: async ({ resource, variables }) => {
+    const response = await fetch(`${API_URL}/${resource}`, {
+      method: "POST",
+      body: JSON.stringify(variables),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status < 200 || response.status > 299) throw response;
+
+    const data = await response.json();
+
+    return { data };
+  },
 };
