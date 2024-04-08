@@ -1,5 +1,15 @@
 const API_URL = "https://api.fake-rest.refine.dev";
 
+const fetcher = async (url: string, options?: RequestInit) => {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      Authorization: localStorage.getItem("my_access_token"),
+    },
+  });
+}
+
 export const dataProvider: {
   getList: ({ resource, pagination, filters, sorters, meta }: {
     resource: any;
@@ -22,7 +32,7 @@ export const dataProvider: {
       ids.forEach((id) => params.append("id", id));
     }
 
-    const response = await fetch(`${API_URL}/${resource}?${params.toString()}`);
+    const response = await fetcher(`${API_URL}/${resource}?${params.toString()}`);
 
     if (response.status < 200 || response.status > 299) throw response;
 
@@ -31,7 +41,7 @@ export const dataProvider: {
     return { data };
   },
   getOne: async ({ resource, id, meta }) => {
-    const response = await fetch(`${API_URL}/${resource}/${id}`);
+    const response = await fetcher(`${API_URL}/${resource}/${id}`);
 
     if (response.status < 200 || response.status > 299) throw response;
 
@@ -40,7 +50,7 @@ export const dataProvider: {
     return { data };
   },
   update: async ({ resource, id, variables, meta}) => {
-    const response = await fetch(`${API_URL}/${resource}/${id}`, {
+    const response = await fetcher(`${API_URL}/${resource}/${id}`, {
       method: "PATCH",
       body: JSON.stringify(variables),
       headers: {
@@ -72,7 +82,7 @@ export const dataProvider: {
       });
     }
 
-    const response = await fetch(`${API_URL}/${resource}?${params.toString()}`);
+    const response = await fetcher(`${API_URL}/${resource}?${params.toString()}`);
 
     if (response.status < 200 || response.status > 299) throw response;
 
@@ -83,7 +93,7 @@ export const dataProvider: {
     return { data, total };
   },
   create: async ({ resource, variables }) => {
-    const response = await fetch(`${API_URL}/${resource}`, {
+    const response = await fetcher(`${API_URL}/${resource}`, {
       method: "POST",
       body: JSON.stringify(variables),
       headers: {

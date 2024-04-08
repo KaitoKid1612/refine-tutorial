@@ -1,12 +1,16 @@
 import React from "react";
-import { useLogout } from "@refinedev/core";
+import { useLogout, useGetIdentity } from "@refinedev/core";
 
 export const Header = () => {
   const { mutate, isLoading } = useLogout();
+  const { data: identity } = useGetIdentity();
+
+  console.log(identity);
 
   return (
     <>
-      <h2>Welcome!</h2>
+      <span>Welcome, </span>
+      <span>{identity?.name ?? ""}</span>
       <button
         type="button"
         disabled={isLoading}
