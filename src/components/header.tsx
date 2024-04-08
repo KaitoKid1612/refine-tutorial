@@ -5,8 +5,6 @@ export const Header = () => {
   const { mutate, isLoading } = useLogout();
   const { data: identity } = useGetIdentity();
 
-  console.log(identity);
-
   return (
     <>
       <span>Welcome, </span>
