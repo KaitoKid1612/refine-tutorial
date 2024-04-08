@@ -1,5 +1,5 @@
 import { Refine, Authenticated, useIsAuthenticated  } from "@refinedev/core";
-import routerProvider from "@refinedev/react-router-v6";
+import routerProvider, { NavigateToResource } from "@refinedev/react-router-v6";
 
 import {
   BrowserRouter,
@@ -26,6 +26,16 @@ function App(): JSX.Element {
         dataProvider={dataProvider}
         authProvider={authProvider}
         routerProvider={routerProvider}
+        resources={[
+          {
+            name: "protected-products",
+            list: "/products",
+            show: "/products/:id",
+            edit: "/products/:id/edit",
+            create: "/products/create",
+            meta: { label: "Products" },
+          },
+        ]}
       >
         <Routes>
           <Route
@@ -39,13 +49,25 @@ function App(): JSX.Element {
               </Authenticated>
             }
             >
-            <Route index element={<ListProducts />} />
+            <Route
+              index
+              // We're also replacing the <Navigate /> component with the <NavigateToResource /> component.
+              // It's tailored version of the <Navigate /> component that will redirect to the resource's list route.
+              element={<NavigateToResource resource="protected-products" />}
+            />
+            <Route path="/products">
+              <Route index element={<ListProducts />} />
+              <Route path=":id" element={<ShowProduct />} />
+              <Route path=":id/edit" element={<EditProduct />} />
+              <Route path="create" element={<CreateProduct />} />
+            </Route>
           </Route>
           <Route
             element={
               <Authenticated key="auth-pages" fallback={<Outlet />}>
-                {/* We're redirecting the user to `/` if they are authenticated and trying to access the `/login` route */}
-                <Navigate to="/" />
+                {/* We're also replacing the <Navigate /> component with the <NavigateToResource /> component. */}
+                {/* It's tailored version of the <Navigate /> component that will redirect to the resource's list route. */}
+                <NavigateToResource resource="protected-products" />
               </Authenticated>
             }
           >
