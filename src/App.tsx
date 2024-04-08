@@ -9,8 +9,8 @@ function App(): JSX.Element {
   return (
     <Refine dataProvider={dataProvider}>
       {/*<ShowProduct />*/}
-      <EditProduct />
-      {/*<ListProduct />*/}
+      {/*<EditProduct />*/}
+      <ListProduct />
       {/*<CreateProduct />*/}
     </Refine>
   );

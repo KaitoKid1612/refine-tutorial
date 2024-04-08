@@ -8,12 +8,28 @@ export const dataProvider: {
     sorters: any;
     meta: any
   }) => Promise<{ total: any; data: any }>;
+  getMany: ({ resource, ids, meta }: { resource: any; ids: any; meta: any }) => Promise<{ data: any }>;
   getOne: ({ resource, id, meta }: { resource: any; id: any; meta: any }) => Promise<{ data: any }>;
   update: ({ resource, id, variables, meta }: { resource: any; id: any; variables: any; meta: any }) => Promise<{
     data: any
   }>;
-  create: ({ resource, variables, meta }: { resource: any; variables: any; meta: any }) => Promise<{ data: any }>
+  create: ({ resource, variables }: { resource: any; variables: any }) => Promise<{ data: any }>
 } = {
+  getMany: async ({ resource, ids, meta }) => {
+    const params = new URLSearchParams();
+
+    if (ids) {
+      ids.forEach((id) => params.append("id", id));
+    }
+
+    const response = await fetch(`${API_URL}/${resource}?${params.toString()}`);
+
+    if (response.status < 200 || response.status > 299) throw response;
+
+    const data = await response.json();
+
+    return { data };
+  },
   getOne: async ({ resource, id, meta }) => {
     const response = await fetch(`${API_URL}/${resource}/${id}`);
 
@@ -60,9 +76,11 @@ export const dataProvider: {
 
     if (response.status < 200 || response.status > 299) throw response;
 
+    const total = Number(response.headers.get("x-total-count"));
+
     const data = await response.json();
 
-    return { data, total: data.length };
+    return { data, total };
   },
   create: async ({ resource, variables }) => {
     const response = await fetch(`${API_URL}/${resource}`, {
