@@ -1,10 +1,7 @@
 import { useForm, useSelect } from "@refinedev/core";
 
 export const CreateProduct = () => {
-  const { onFinish, mutationResult } = useForm({
-    resource: "products",
-    action: "create",
-  });
+  const { onFinish, mutationResult } = useForm();
 
   const { options } = useSelect({
     resource: "categories",

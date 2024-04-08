@@ -1,7 +1,8 @@
-import { useList, useTable, useMany } from "@refinedev/core";
+import { useNavigation, useTable, useMany } from "@refinedev/core";
+
+import { Link } from "react-router-dom";
 
 export const ListProducts = () => {
-
   const {
     tableQueryResult: { data, isLoading },
     current,
@@ -10,11 +11,14 @@ export const ListProducts = () => {
     sorters,
     setSorters,
   } = useTable({
-    resource: "protected-products",
     pagination: { current: 1, pageSize: 10 },
     sorters: [{ field: "price", order: "esc" }],
     filters: [{ field: "material", operator: "eq", value: "Aluminum" }],
   })
+
+  // You can also use methods like show or list to trigger navigation.
+  // We're using url methods to provide more semantically correct html.
+  const { showUrl, editUrl } = useNavigation();
 
   const { data: categories } = useMany({
     resource: "categories",
@@ -103,6 +107,10 @@ export const ListProducts = () => {
             </td>
             <td>{product.material}</td>
             <td>{product.price}</td>
+            <td>
+              <Link to={showUrl("protected-products", product.id)}>Show</Link>
+              <Link to={editUrl("protected-products", product.id)}>Edit</Link>
+            </td>
           </tr>
         ))}
         </tbody>
@@ -112,7 +120,7 @@ export const ListProducts = () => {
           {"<"}
         </button>
         <div>
-          {current - 1 > 0 && (
+        {current - 1 > 0 && (
             <span onClick={() => onPage(current - 1)}>{current - 1}</span>
           )}
           <span className="current">{current}</span>
