@@ -10,7 +10,7 @@ export const ListProducts = () => {
     sorters,
     setSorters,
   } = useTable({
-    resource: "products",
+    resource: "protected-products",
     pagination: { current: 1, pageSize: 10 },
     sorters: [{ field: "price", order: "esc" }],
     filters: [{ field: "material", operator: "eq", value: "Aluminum" }],
