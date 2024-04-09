@@ -30,8 +30,6 @@ export const EditProduct = () => {
         <Form.Item label="Price" name="price">
           <InputNumber step="0.01" stringMode />
         </Form.Item>
-        {/* SaveButton renders a submit button to submit our form */}
-        <SaveButton {...saveButtonProps} />
       </Form>
     </Edit>
   );
