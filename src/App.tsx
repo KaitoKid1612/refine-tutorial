@@ -7,7 +7,6 @@ import {
   Routes,
   Route,
   Outlet,
-  Navigate,
 } from "react-router-dom";
 
 // We'll wrap our app with Ant Design's ConfigProvider to set the theme and App component to use the theme properly.
@@ -21,7 +20,6 @@ import { EditProduct } from "./pages/products/edit";
 import { ListProducts } from "./pages/products/list";
 import { CreateProduct } from "./pages/products/create";
 import { Login } from "./pages/login";
-import { Header } from "./components/header";
 
 // We're importing a reset.css file to reset the default styles of the browser.
 import "antd/dist/reset.css";
