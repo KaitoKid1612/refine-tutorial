@@ -1,7 +1,20 @@
-import { useShow } from "@refinedev/core";
+import { useShow, useOne } from "@refinedev/core";
+import { TextField, NumberField, MarkdownField } from "@refinedev/antd";
+
+import { Typography } from "antd";
 
 export const ShowProduct = () => {
-  const { queryResult: { data, isLoading } } = useShow();
+  const {
+    queryResult: { data, isLoading },
+  } = useShow();
+
+  const { data: categoryData, isLoading: categoryIsLoading } = useOne({
+    resource: "categories",
+    id: data?.data?.category.id || "",
+    queryOptions: {
+      enabled: !!data?.data,
+    },
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -9,11 +22,25 @@ export const ShowProduct = () => {
 
   return (
     <div>
-      <h1>{data?.data.name}</h1>
-      <p>{data?.data.description}</p>
-      <p>{data?.data.price}</p>
-      <p>{data?.data.material}</p>
-      <p>{data?.data.category.name}</p>
+      <Typography.Title level={5}>Id</Typography.Title>
+      <TextField value={data?.data?.id} />
+
+      <Typography.Title level={5}>Name</Typography.Title>
+      <TextField value={data?.data?.name} />
+
+      <Typography.Title level={5}>Description</Typography.Title>
+      <MarkdownField value={data?.data?.description} />
+
+      <Typography.Title level={5}>Material</Typography.Title>
+      <TextField value={data?.data?.material} />
+
+      <Typography.Title level={5}>Category</Typography.Title>
+      <TextField
+        value={categoryIsLoading ? "Loading..." : categoryData?.data?.title}
+      />
+
+      <Typography.Title level={5}>Price</Typography.Title>
+      <NumberField value={data?.data?.price} />
     </div>
-  )
+  );
 };

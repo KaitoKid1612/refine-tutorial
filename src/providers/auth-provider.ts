@@ -1,19 +1,11 @@
-export const authProvider: {
-  logout: () => Promise<{ success: boolean; redirectTo: string }>;
-  forgotPassword: (params) => Promise<void>;
-  onError: (error) => Promise<{ logout: boolean; error: { message: string } } | {}>;
-  updatePassword: (params) => Promise<void>;
-  getIdentity: () => Promise<any>;
-  getPermissions: () => Promise<void>;
-  check: () => Promise<{ authenticated: boolean }>;
-  login: ({ email, password }: { email: any; password: any }) => Promise<{ success: boolean } | { success: boolean }>;
-  register: (params) => Promise<void>
-} = {
+import { AuthProvider } from "@refinedev/core";
+
+export const authProvider: AuthProvider = {
   onError: async (error) => {
     if (error?.status === 401) {
       return {
         logout: true,
-        error: { message: "Unauthorized" },
+        error: { message: "Unauthorized", name: "Unauthorized"},
       };
     }
 
@@ -22,7 +14,7 @@ export const authProvider: {
   getIdentity: async () => {
     const response = await fetch("https://api.fake-rest.refine.dev/auth/me", {
       headers: {
-        Authorization: localStorage.getItem("my_access_token"),
+        Authorization: `Bearer ${localStorage.getItem("my_access_token")}`,
       },
     });
 
