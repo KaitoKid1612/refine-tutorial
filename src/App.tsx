@@ -19,6 +19,9 @@ import { ShowProduct } from "./pages/products/show";
 import { EditProduct } from "./pages/products/edit";
 import { ListProducts } from "./pages/products/list";
 import { CreateProduct } from "./pages/products/create";
+
+import { ListCategories } from "./pages/categories/list";
+
 import { Login } from "./pages/login";
 
 // We're importing a reset.css file to reset the default styles of the browser.
@@ -42,6 +45,13 @@ function App(): JSX.Element {
                 edit: "/products/:id/edit",
                 create: "/products/create",
                 meta: { label: "Products" },
+              },
+              // We're adding the categories resource to the resources array
+              // This way, there will be a link to the categories list in the sidebar
+              {
+                name: "categories",
+                list: "/categories",
+                meta: { label: "Categories" },
               },
             ]}
           >
@@ -72,6 +82,9 @@ function App(): JSX.Element {
                   <Route path=":id" element={<ShowProduct />} />
                   <Route path=":id/edit" element={<EditProduct />} />
                   <Route path="create" element={<CreateProduct />} />
+                </Route>
+                <Route path="/categories">
+                  <Route index element={<ListCategories />} />
                 </Route>
               </Route>
               <Route
