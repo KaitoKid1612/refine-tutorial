@@ -1,6 +1,6 @@
-import { useForm, useSelect, SaveButton, Create } from "@refinedev/antd";
+import { useForm, useSelect, SaveButton, Create, getValueFromEvent } from "@refinedev/antd";
 
-import { Form, Input, Select, InputNumber } from "antd";
+import { Form, Input, Select, InputNumber, Upload } from "antd";
 
 export const CreateProduct = () => {
   const { formProps, saveButtonProps } = useForm({
@@ -29,7 +29,28 @@ export const CreateProduct = () => {
         <Form.Item label="Price" name="price">
           <InputNumber step="0.01" stringMode />
         </Form.Item>
-        <SaveButton {...saveButtonProps} />
+
+        <Form.Item label="Avatar">
+          <Form.Item
+            name="avatar"
+            valuePropName="fileList"
+            getValueFromEvent={getValueFromEvent}
+            noStyle
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Upload.Dragger
+              listType="picture"
+              multiple
+              beforeUpload={() => false}
+            >
+              <p className="ant-upload-text">Drag & drop a file in this area</p>
+            </Upload.Dragger>
+          </Form.Item>
+        </Form.Item>
       </Form>
     </Create>
   );
