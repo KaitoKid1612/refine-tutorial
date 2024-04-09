@@ -1,6 +1,6 @@
 import { Refine, Authenticated, useIsAuthenticated  } from "@refinedev/core";
 import routerProvider, { NavigateToResource } from "@refinedev/react-router-v6";
-import { ThemedLayoutV2 } from "@refinedev/antd";
+import { ThemedLayoutV2, ThemedTitleV2 } from "@refinedev/antd";
 
 import {
   BrowserRouter,
@@ -53,7 +53,10 @@ function App(): JSX.Element {
                   // We're omitting the `fallback` prop to redirect users to the login page if they are not authenticated.
                   // If the user is authenticated, we'll render the `<Header />` component and the `<Outlet />` component to render the inner routes.
                   <Authenticated key="authenticated-routes" redirectOnFail="/login">
-                    <ThemedLayoutV2>
+                    <ThemedLayoutV2
+                      Title={(props) => (
+                        <ThemedTitleV2 {...props} text="Awesome Project"/>
+                      )}>
                       <Outlet />
                     </ThemedLayoutV2>
                   </Authenticated>
