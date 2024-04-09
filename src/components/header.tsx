@@ -15,14 +15,14 @@ export const Header = () => {
     <>
       <h2>
         <span>Welcome, </span>
-        <span>{identity?.name ?? ""}</span>
+        <span>{(identity as { name?: string })?.name ?? ""}</span>
       </h2>
       <Link to={listUrl("protected-products")}>List Products</Link>
       <Link to={createUrl("protected-products")}>Create Product</Link>
       <button
         type="button"
         disabled={isLoading}
-        onClick={mutate}
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => mutate()}
       >
         Logout
       </button>
