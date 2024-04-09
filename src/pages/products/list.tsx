@@ -1,4 +1,5 @@
 import { useMany, getDefaultFilter } from "@refinedev/core";
+
 import {
   useTable,
   EditButton,
@@ -6,6 +7,7 @@ import {
   getDefaultSortOrder,
   FilterDropdown,
   useSelect,
+  List
 } from "@refinedev/antd";
 
 import { Table, Space, Input, Select } from "antd";
@@ -33,59 +35,61 @@ export const ListProducts = () => {
   return (
     <div>
       <h1>Products</h1>
-      <Table {...tableProps} rowKey="id">
-        <Table.Column
-          dataIndex="id"
-          title="ID"
-          sorter
-          defaultSortOrder={getDefaultSortOrder("id", sorters)}
-        />
-        <Table.Column
-          dataIndex="name"
-          title="Name"
-          sorter
-          defaultSortOrder={getDefaultSortOrder("name", sorters)}
-          // FilterDropdown will map the value to the filter
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column
-          dataIndex={["category", "id"]}
-          title="Category"
-          render={(value) => {
-            if (isLoading) {
-              return "Loading...";
-            }
+      <List>
+        <Table {...tableProps} rowKey="id">
+          <Table.Column
+            dataIndex="id"
+            title="ID"
+            sorter
+            defaultSortOrder={getDefaultSortOrder("id", sorters)}
+          />
+          <Table.Column
+            dataIndex="name"
+            title="Name"
+            sorter
+            defaultSortOrder={getDefaultSortOrder("name", sorters)}
+            // FilterDropdown will map the value to the filter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Input />
+              </FilterDropdown>
+            )}
+          />
+          <Table.Column
+            dataIndex={["category", "id"]}
+            title="Category"
+            render={(value) => {
+              if (isLoading) {
+                return "Loading...";
+              }
 
-            return categories?.data?.find((category) => category.id == value)
-              ?.title;
-          }}
-          filterDropdown={(props) => (
-            <FilterDropdown
-              {...props}
-              // We'll store the selected id as number
-              mapValue={(selectedKey) => Number(selectedKey)}
-            >
-              <Select style={{ minWidth: 200 }} {...selectProps} />
-            </FilterDropdown>
-          )}
-          defaultFilteredValue={getDefaultFilter("category.id", filters, "eq")}
-        />
-        <Table.Column dataIndex="material" title="Material" />
-        <Table.Column dataIndex="price" title="Price" />
-        <Table.Column
-          title="Actions"
-          render={(_, record: { id: string }) => (
-            <Space>
-              <ShowButton hideText size="small" recordItemId={record.id} />
-              <EditButton hideText size="small" recordItemId={record.id} />
-            </Space>
-          )}
-        />
-      </Table>
+              return categories?.data?.find((category) => category.id == value)
+                ?.title;
+            }}
+            filterDropdown={(props) => (
+              <FilterDropdown
+                {...props}
+                // We'll store the selected id as number
+                mapValue={(selectedKey) => Number(selectedKey)}
+              >
+                <Select style={{ minWidth: 200 }} {...selectProps} />
+              </FilterDropdown>
+            )}
+            defaultFilteredValue={getDefaultFilter("category.id", filters, "eq")}
+          />
+          <Table.Column dataIndex="material" title="Material" />
+          <Table.Column dataIndex="price" title="Price" />
+          <Table.Column
+            title="Actions"
+            render={(_, record: { id: string }) => (
+              <Space>
+                <ShowButton hideText size="small" recordItemId={record.id} />
+                <EditButton hideText size="small" recordItemId={record.id} />
+              </Space>
+            )}
+          />
+        </Table>
+      </List>
     </div>
   );
 };
