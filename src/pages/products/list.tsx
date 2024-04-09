@@ -14,6 +14,7 @@ export const ListProducts = () => {
     pagination: { current: 1, pageSize: 10 },
     sorters: [{ field: "price", order: "esc" }],
     filters: [{ field: "material", operator: "eq", value: "Aluminum" }],
+    syncWithLocation: true,
   })
 
   // You can also use methods like show or list to trigger navigation.

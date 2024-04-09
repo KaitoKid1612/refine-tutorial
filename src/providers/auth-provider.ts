@@ -1,12 +1,12 @@
 export const authProvider: {
-  logout: () => Promise<{ success: boolean }>;
+  logout: () => Promise<{ success: boolean; redirectTo: string }>;
   forgotPassword: (params) => Promise<void>;
   onError: (error) => Promise<{ logout: boolean; error: { message: string } } | {}>;
   updatePassword: (params) => Promise<void>;
-  getIdentity: () => Promise<void>;
+  getIdentity: () => Promise<any>;
   getPermissions: () => Promise<void>;
   check: () => Promise<{ authenticated: boolean }>;
-  login: ({ email, password }: { email: any; password: any }) => Promise<{ success: boolean }>;
+  login: ({ email, password }: { email: any; password: any }) => Promise<{ success: boolean } | { success: boolean }>;
   register: (params) => Promise<void>
 } = {
   onError: async (error) => {
@@ -52,11 +52,14 @@ export const authProvider: {
       return { success: true };
     }
 
-    return { success: false };
+    // Let's redirect to the index page after a successful login.
+    return { success: true, redirectTo: "/" };
   },
   logout: async () => {
     localStorage.removeItem("my_access_token");
-    return { success: true };
+
+    // Let's redirect to the login page after a successful logout.
+    return { success: true, redirectTo: "/login" };
   },
   check: async () => {
     // When logging in, we'll obtain an access token from our API and store it in the local storage.
